@@ -3,4 +3,5 @@ flask_sqlalchemy
 pyTelegramBotAPI
 requests
 beautifulsoup4
+cloudscraper
 gunicorn
