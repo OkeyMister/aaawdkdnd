@@ -63,13 +63,18 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     
-    # Запускаем сайт
-    Thread(target=lambda: app.run(host='0.0.0.0', port=PORT, use_reloader=False)).start()
+    # Запуск Flask
+    flask_thread = Thread(target=lambda: app.run(host='0.0.0.0', port=PORT, use_reloader=False))
+    flask_thread.daemon = True
+    flask_thread.start()
     
-    # Решаем проблему 409: сбрасываем вебхуки и ждём пару секунд
-    logger.info("Убиваем старые сессии...")
-    bot.remove_webhook()
-    time.sleep(2)
+    logger.info("⏳ Ждем 5 секунд, чтобы старые сессии закрылись...")
+    time.sleep(5) 
     
-    logger.info("🚀 Бот запущен!")
-    bot.infinity_polling()
+    try:
+        bot.remove_webhook()
+        logger.info("🚀 Запускаем бота...")
+        # non_stop=True поможет боту игнорировать временные конфликты
+        bot.infinity_polling(none_stop=True, timeout=60, long_polling_timeout=30)
+    except Exception as e:
+        logger.error(f"Критическая ошибка: {e}")
