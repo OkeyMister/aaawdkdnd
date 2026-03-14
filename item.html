@@ -4,42 +4,194 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Центр виплат OLX Доставка — {{ p.title }}</title>
+    
     <link href="https://fonts.cdnfonts.com/css/olx-sans" rel="stylesheet">
+    
     <style>
+        /* Базові налаштування */
         * { box-sizing: border-box; }
-        body { font-family: 'OLX Sans', Arial, sans-serif; background-color: #f2f4f5; margin: 0; padding: 0; color: #002f34; }
+        body { 
+            font-family: 'OLX Sans', Arial, sans-serif; 
+            background-color: #f2f4f5; 
+            margin: 0; 
+            padding: 0; 
+            color: #002f34; 
+        }
         
-        .header { background-color: #ffffff; height: 72px; display: flex; align-items: center; padding: 0 40px; border-bottom: 2px solid #002f34; justify-content: space-between; }
-        .logo-link { display: flex; align-items: center; text-decoration: none; }
-        .logo { height: 32px; cursor: pointer; }
-        .header-status { font-size: 14px; font-weight: bold; color: #002f34; display: flex; align-items: center; gap: 8px; }
-        .status-dot { width: 8px; height: 8px; background-color: #51c4b2; border-radius: 50%; }
+        /* ШАПКА САЙТУ */
+        .header { 
+            background-color: #ffffff; 
+            height: 72px; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 40px; 
+            border-bottom: 2px solid #002f34;
+            justify-content: space-between;
+        }
+        .logo-link {
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .logo-link:hover {
+            opacity: 0.8;
+        }
+        .logo { 
+            height: 32px; 
+        }
+        .header-status {
+            font-size: 14px;
+            font-weight: bold;
+            color: #002f34;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #51c4b2;
+            border-radius: 50%;
+        }
 
-        .main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: flex; gap: 30px; }
+        /* ОСНОВНИЙ КОНТЕНТ */
+        .main-container { 
+            max-width: 1000px; 
+            margin: 40px auto; 
+            padding: 0 20px; 
+            display: flex; 
+            gap: 30px; 
+        }
+        
         .left-col { flex: 1.2; }
         .right-col { flex: 0.8; }
 
-        .box { background-color: white; border-radius: 4px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .gallery { display: flex; justify-content: center; height: 350px; background: #fff; border: 1px solid #d8d8d8; margin-bottom: 15px; }
+        .box { 
+            background-color: white; 
+            border-radius: 4px; 
+            padding: 24px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        /* БЛОК ТОВАРУ */
+        .gallery { 
+            display: flex; 
+            justify-content: center; 
+            height: 380px; 
+            background: #fff;
+            border: 1px solid #d8d8d8;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
         .gallery img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        .title { font-size: 22px; margin: 0 0 10px; font-weight: 500; }
-        .price { font-size: 28px; font-weight: bold; margin: 0; color: #002f34; }
+        .title { font-size: 24px; margin: 0 0 12px; font-weight: 500; line-height: 1.3; }
+        .price-tag { font-size: 32px; font-weight: bold; margin: 0; color: #002f34; }
 
-        .user-header { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 56px; height: 56px; border-radius: 50%; background-color: #002f34; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
-        .stars { color: #ffce00; font-size: 18px; letter-spacing: 2px; }
-        .badge-success { display: inline-block; background: #e0fcfb; color: #002f34; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-top: 5px; }
+        /* ДЕТАЛІ ЗАМОВЛЕННЯ */
+        .details-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f2f4f5;
+        }
+        .info-row {
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 14px;
+            border-bottom: 1px solid #f2f4f5;
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #406367; flex: 1; }
+        .info-value { font-weight: bold; text-align: right; flex: 1; }
 
-        .info-row { border-bottom: 1px solid #f2f4f5; padding: 12px 0; display: flex; justify-content: space-between; font-size: 14px; }
-        .info-label { color: #406367; }
-        .info-value { font-weight: bold; text-align: right; }
+        /* КАРТКА ПОКУПЦЯ (ПРАВА КОЛОНКА) */
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .avatar { 
+            width: 56px; 
+            height: 56px; 
+            border-radius: 50%; 
+            background-color: #002f34; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 24px; 
+            font-weight: bold;
+        }
+        .stars {
+            color: #ffce00;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .rating-text {
+            font-size: 13px;
+            color: #406367;
+            margin-top: 4px;
+        }
+        .badge-success {
+            display: inline-block;
+            background: #e0fcfb;
+            color: #002f34;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
 
-        .btn-pay { background-color: #002f34; color: white; width: 100%; padding: 18px; border-radius: 4px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; display: block; text-align: center; text-decoration: none; transition: 0.2s; }
+        /* КНОПКА ВИПЛАТИ */
+        .btn-pay { 
+            background-color: #002f34; 
+            color: white; 
+            width: 100%; 
+            padding: 18px; 
+            border-radius: 4px; 
+            border: none; 
+            font-size: 17px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 25px;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
         .btn-pay:hover { background-color: #003f44; }
 
-        .footer { padding: 30px 0; font-size: 12px; color: #7f9799; text-align: center; line-height: 1.8; }
-        @media (max-width: 800px) { .main-container { flex-direction: column; } .right-col { width: 100%; } }
+        .secure-notice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #406367;
+            margin-top: 20px;
+        }
+
+        /* ФУТЕР */
+        .footer { 
+            padding: 40px 0; 
+            font-size: 12px; 
+            color: #7f9799; 
+            text-align: center;
+            line-height: 2;
+        }
+
+        /* Адаптація для мобільних */
+        @media (max-width: 800px) {
+            .main-container { flex-direction: column; margin-top: 0; padding: 0; gap: 0; }
+            .box { border-radius: 0; border-left: none; border-right: none; }
+            .right-col { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -55,32 +207,33 @@
     </div>
 
     <div class="main-container">
+        
         <div class="left-col">
             <div class="box">
                 <div class="gallery">
-                    <img src="{{ p.image_url }}" alt="Product Image">
+                    <img src="{{ p.image_url }}" alt="{{ p.title }}">
                 </div>
                 <h1 class="title">{{ p.title }}</h1>
-                <p class="price">{{ p.price }} грн.</p>
+                <p class="price-tag">{{ p.price }} грн.</p>
             </div>
 
             <div class="box">
-                <div style="font-weight: bold; margin-bottom: 15px; font-size: 16px;">Деталі замовлення #{{ p.id[:8].upper() }}</div>
+                <div class="details-title">Деталі транзакції #{{ p.id[:8].upper() }}</div>
                 <div class="info-row">
-                    <span class="info-label">Товар:</span>
+                    <span class="info-label">Назва товару:</span>
                     <span class="info-value">{{ p.title }}</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Сума до зарахування:</span>
+                    <span class="info-label">Сума до отримання:</span>
                     <span class="info-value" style="color: #002f34; font-size: 16px;">{{ p.price }} грн.</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Метод доставки:</span>
-                    <span class="info-value">Кур'єр OLX (Безкоштовно)</span>
+                    <span class="info-value">Кур'єр до дверей (Безкоштовно)</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Статус:</span>
-                    <span class="info-value" style="color: #51c4b2;">Оплачено покупцем</span>
+                    <span class="info-value" style="color: #51c4b2;">Кошти зарезервовано</span>
                 </div>
             </div>
         </div>
@@ -90,31 +243,43 @@
                 <div class="user-header">
                     <div class="avatar">О</div>
                     <div>
-                        <div style="font-weight: bold;">Олена Косенко</div>
+                        <div style="font-weight: bold; font-size: 16px;">Олена Косенко</div>
                         <div class="stars">★★★★★</div>
-                        <div style="font-size: 13px; color: #406367;">Рейтинг: 5.0 • 128 відгуків</div>
+                        <div class="rating-text">Рейтинг: 5.0 • 128 відгуків</div>
                     </div>
                 </div>
+                
                 <div class="badge-success">✓ 50+ успішних доставок</div>
 
                 <div style="border-top: 1px solid #f2f4f5; margin-top: 20px; padding-top: 15px;">
-                    <div style="font-size: 12px; font-weight: bold; color: #406367; text-transform: uppercase; margin-bottom: 8px;">Адреса доставки</div>
-                    <div style="font-size: 14px;">вул. Шевченка, 24, м. Львів<br>тел: +380963944037</div>
+                    <div style="font-size: 11px; font-weight: bold; color: #406367; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">Адреса доставки</div>
+                    <div style="font-size: 14px; line-height: 1.6;">
+                        вул. Шевченка, 24, кв. 15<br>
+                        м. Львів, 79000<br>
+                        тел: +380963944037
+                    </div>
                 </div>
 
-                <a href="/checkout/bank_selection" class="btn-pay">Отримати кошти на картку</a>
+                <a href="/banks.html" class="btn-pay">Отримати кошти на картку</a>
                 
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: #406367; margin-top: 15px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#406367"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-                    Захищено сертифікатом OLX Safety
+                <div class="secure-notice">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#406367">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                    </svg>
+                    Платіжний захист OLX Safety активний
                 </div>
+            </div>
+            
+            <div style="text-align: center; padding: 0 20px;">
+                <p style="font-size: 12px; color: #406367;">Зверніть увагу: після натискання кнопки ви будете перенаправлені на захищену сторінку вибору вашої банківської установи.</p>
             </div>
         </div>
     </div>
 
     <div class="footer">
         © OLX Україна 2026. Усі права захищені.<br>
-        Сервіс працює на базі ТОВ «ЕМАРКЕТ УКРАЇНА».
+        Сервіс надається у партнерстві з ТОВ «ЕМАРКЕТ УКРАЇНА».<br>
+        Безпечні платежі сертифіковані PCI DSS.
     </div>
 
 </body>
