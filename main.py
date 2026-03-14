@@ -30,32 +30,51 @@ class Product(db.Model):
     image_url = db.Column(db.Text)
 
 def parse_olx(url):
-    # Додаємо правильні заголовки, щоб OLX не видавав "Повідомлення"
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
-        'Accept-Language': 'uk-UA,uk;q=0.9,en-US;q=0.8,en;q=0.7'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Accept-Language': 'uk-UA,uk;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Referer': 'https://www.google.com/'
     }
+    
     try:
-        r = requests.get(url, headers=headers, timeout=10)
+        r = requests.get(url, headers=headers, timeout=15)
         r.encoding = 'utf-8'
-        soup = BeautifulSoup(r.text, 'html.parser')
         
-        # Більш точні селектори для назви та ціни
-        title_tag = soup.find('h1', {'data-cy': 'ad_title'}) or soup.find('h4') or soup.find('h1')
-        title = title_tag.get_text(strip=True) if title_tag else "Товар без назви"
+        if r.status_code != 200:
+            return {"title": "Помилка доступу (Код 403/404)", "price": "0", "image": ""}
 
-        price_tag = soup.find('h3') or soup.select_one('[data-testid="ad-price-container"]')
-        # Очищаємо ціну від "грн", "Договірна" тощо, залишаємо тільки цифри для краси
+        soup = BeautifulSoup(r.text, 'html.parser')
+
+        # 1. Шукаємо НАЗВУ
+        # OLX часто використовує атрибут data-cy
+        title_tag = soup.find('h1', {'data-cy': 'ad_title'}) or \
+                    soup.find('h4') or \
+                    soup.find('h1')
+        title = title_tag.get_text(strip=True) if title_tag else "Назва не знайдена"
+
+        # 2. Шукаємо ЦІНУ
+        price_tag = soup.find('h3') or \
+                    soup.select_one('[data-testid="ad-price-container"]') or \
+                    soup.select_one('.css-12v6i7') # запасний варіант для нових версій
+        
         price_raw = price_tag.get_text(strip=True) if price_tag else "0"
+        # Лишаємо тільки цифри
         price = "".join(filter(str.isdigit, price_raw)) or price_raw
 
-        img_tag = soup.select_one('img.css-1bmv9io') or soup.find('img', {'src': True})
+        # 3. Шукаємо КАРТИНКУ
+        img_tag = soup.select_one('img.css-1bmv9io') or \
+                  soup.find('img', {'src': True, 'alt': True})
         img = img_tag['src'] if img_tag else "https://via.placeholder.com/400"
 
+        # Якщо замість назви прийшло "Повідомлення" - значить нас заблокували
+        if title.lower() in ["повідомлення", "опис", "olx"]:
+            title = "⚠️ Блокування OLX (Бот виявлений)"
+
         return {"title": title, "price": price, "image": img}
+
     except Exception as e:
-        logger.error(f"Парсинг помилка: {e}")
-        return {"title": "Помилка завантаження", "price": "0", "image": ""}
+        print(f"Помилка: {e}")
+        return {"title": "Помилка парсингу", "price": "0", "image": ""}
 
 @app.route('/item/<item_id>')
 def show_item(item_id):
