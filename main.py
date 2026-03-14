@@ -56,6 +56,23 @@ def handle_msg(message):
         bot.reply_to(message, "❌ Ошибка парсинга")
 
 if __name__ == '__main__':
-    with app.app_context(): db.create_all()
-    Thread(target=lambda: app.run(host='0.0.0.0', port=PORT, use_reloader=False)).start()
-    bot.infinity_polling()
+    with app.app_context():
+        db.create_all()
+    
+    # Запускаем Flask в отдельном потоке
+    flask_thread = Thread(target=lambda: app.run(host='0.0.0.0', port=PORT, use_reloader=False))
+    flask_thread.daemon = True
+    flask_thread.start()
+    
+    logger.info("🚀 Чистим старые сессии и запускаем бота...")
+    
+    # Перед запуском удаляем вебхук, чтобы не было конфликтов 409
+    bot.remove_webhook()
+    
+    # Запуск polling
+    while True:
+        try:
+            bot.infinity_polling(timeout=20, long_polling_timeout=10)
+        except Exception as e:
+            logger.error(f"Бот упал с ошибкой: {e}")
+            time.sleep(5)
