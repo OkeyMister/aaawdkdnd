@@ -3,6 +3,7 @@ import uuid
 import requests
 import telebot
 import logging
+import time
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -11,11 +12,12 @@ from threading import Thread
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Берём настройки из переменных Railway
 TOKEN = os.environ.get("BOT_TOKEN")
 DOMAIN = os.environ.get("RAILWAY_STATIC_URL", "localhost:5000").replace("https://", "").replace("http://", "")
 PORT = int(os.environ.get("PORT", 8080))
 
-# template_folder='.' заставляет Flask искать HTML в корне, а не в templates/
+# Говорим Flask искать HTML прямо в корне
 app = Flask(__name__, template_folder='.')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///database.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -35,7 +37,9 @@ def parse_olx(url):
     soup = BeautifulSoup(r.text, 'html.parser')
     title = (soup.find('h1') or soup.find('h4')).get_text(strip=True)
     price = (soup.select_one('h3') or soup.select_one('[data-testid="ad-price-container"]')).get_text(strip=True)
-    img = soup.select_one('img.css-1bmv9io')['src']
+    # Пытаемся найти картинку
+    img_tag = soup.select_one('img.css-1bmv9io') or soup.find('img')
+    img = img_tag['src'] if img_tag else "https://via.placeholder.com/400"
     return {"title": title, "price": price, "image": img}
 
 @app.route('/item/<item_id>')
@@ -51,28 +55,21 @@ def handle_msg(message):
             new_item = Product(title=data['title'], price=data['price'], image_url=data['image'])
             db.session.add(new_item)
             db.session.commit()
-            bot.reply_to(message, f"✅ Готово!\n\n🔗 Ссылка: https://{DOMAIN}/item/{new_item.id}")
+            bot.reply_to(message, f"✅ Ссылка готова: https://{DOMAIN}/item/{new_item.id}")
     except Exception as e:
-        bot.reply_to(message, "❌ Ошибка парсинга")
+        bot.reply_to(message, "❌ Ошибка при создании ссылки")
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     
-    # Запускаем Flask в отдельном потоке
-    flask_thread = Thread(target=lambda: app.run(host='0.0.0.0', port=PORT, use_reloader=False))
-    flask_thread.daemon = True
-    flask_thread.start()
+    # Запускаем сайт
+    Thread(target=lambda: app.run(host='0.0.0.0', port=PORT, use_reloader=False)).start()
     
-    logger.info("🚀 Чистим старые сессии и запускаем бота...")
-    
-    # Перед запуском удаляем вебхук, чтобы не было конфликтов 409
+    # Решаем проблему 409: сбрасываем вебхуки и ждём пару секунд
+    logger.info("Убиваем старые сессии...")
     bot.remove_webhook()
+    time.sleep(2)
     
-    # Запуск polling
-    while True:
-        try:
-            bot.infinity_polling(timeout=20, long_polling_timeout=10)
-        except Exception as e:
-            logger.error(f"Бот упал с ошибкой: {e}")
-            time.sleep(5)
+    logger.info("🚀 Бот запущен!")
+    bot.infinity_polling()
