@@ -1,6 +1,6 @@
 flask
 flask_sqlalchemy
-aiogram==2.25.1
+pyTelegramBotAPI
 requests
 beautifulsoup4
 gunicorn
