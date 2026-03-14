@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ p.title }} - OLX.ua</title>
+    <link href="https://fonts.cdnfonts.com/css/olx-sans" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'OLX Sans', Arial, sans-serif; background: #f2f4f5; margin: 0; padding: 0; color: #002f34; }
+        .header { background: #002f34; height: 64px; display: flex; align-items: center; padding: 0 40px; }
+        .logo { width: 50px; height: 30px; }
+        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: flex; gap: 30px; }
+        .left-col { flex: 1; }
+        .right-col { width: 400px; flex-shrink: 0; }
+        .box { background: white; border-radius: 4px; border: 1px solid #d8d8d8; padding: 20px; margin-bottom: 20px; }
+        .gallery { display: flex; justify-content: center; height: 600px; padding: 10px; }
+        .gallery img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .title { font-size: 24px; color: #002f34; margin: 0 0 10px; font-weight: 500; }
+        .price { font-size: 32px; font-weight: bold; margin-bottom: 20px; }
+        .olx-delivery { border: 1px solid #e0fcfb; background: #fcfcfc; padding: 12px 15px; border-radius: 4px; display: inline-flex; align-items: center; font-size: 14px; gap: 10px; }
+        .sidebar-box { padding: 25px; border-bottom: 1px solid #d8d8d8; }
+        .user-block { display: flex; align-items: center; gap: 15px; }
+        .avatar { width: 50px; height: 50px; border-radius: 50%; background: #002f34; color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .name { font-size: 18px; font-weight: bold; }
+        .verified { color: #51c4b2; font-size: 14px; display: flex; align-items: center; gap: 5px; margin-top: 4px; }
+        .data-title { font-weight: bold; font-size: 13px; margin-bottom: 8px; color: #406367; }
+        .data-value { font-size: 14px; line-height: 1.4; color: #002f34; }
+        .btn-large { display: block; width: 100%; background: #002f34; color: white; text-align: center; padding: 16px; border-radius: 4px; font-size: 16px; font-weight: bold; margin: 20px 0; border: none; cursor: pointer; }
+        .footer { background: white; border-top: 1px solid #d8d8d8; padding: 40px 0; margin-top: 40px; font-size: 12px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; }
+        @media (max-width: 900px) {
+            .main-container { flex-direction: column; padding: 0; }
+            .right-col { width: 100%; }
+            .gallery { height: 350px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://statics.olx.ua/static/olxua/naspersct-fe/olx-ua-static/img/logos/olx-logo.svg" class="logo">
+    </div>
+    <div class="main-container">
+        <div class="left-col">
+            <div class="box gallery"><img src="{{ p.image_url }}"></div>
+            <div class="box">
+                <h1 class="title">{{ p.title }}</h1>
+                <div class="price">{{ p.price }}</div>
+                <div class="olx-delivery">
+                    <img src="https://statics.olx.ua/static/olxua/naspersct-fe/olx-ua-static/img/delivery/olx-delivery-icon.svg">
+                    <span>С OLX Доставкой вы не платите за комиссию перевода</span>
+                </div>
+            </div>
+        </div>
+        <div class="right-col">
+            <div class="box" style="padding: 0;">
+                <div class="sidebar-box">
+                    <div class="user-block">
+                        <div class="avatar">О</div>
+                        <div class="user-info">
+                            <div class="name">Олена</div>
+                            <div class="verified">
+                                <img src="https://statics.olx.ua/static/olxua/naspersct-fe/olx-ua-static/img/verified-icon.svg" width="16">
+                                <span>Продавец проверен</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-box">
+                    <div class="data-title">ДАННЫЕ ПОКУПАТЕЛЯ:</div>
+                    <div class="data-value">
+                        ПІБ: Косенко Олена Дмитрівна<br>
+                        Номер телефону: +380963944037<br>
+                        Адреса: вул. Шевченка, 24, кв. 15
+                    </div>
+                </div>
+                <div class="sidebar-box">
+                    <button class="btn-large">Отримати кошти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-container">
+            <div>© 2026 OLX</div>
+            <div>Помощь • Карта сайта • Правила безопасности</div>
+        </div>
+    </div>
+</body>
+</html>
